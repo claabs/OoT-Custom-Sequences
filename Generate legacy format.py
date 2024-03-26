@@ -13,13 +13,14 @@ if os.path.exists(destination_dir):
 # Recreate the destination directory
 os.makedirs(destination_dir)
 
-# Iterate through files
 for root, dirs, files in os.walk(source_dir):
     for filename in files:
         if filename.endswith('.ootrs'):
-            # Construct full path to the file
             file_path = os.path.join(root, filename)
 
-            group_name = os.path.basename(os.path.dirname(file_path))
-            sequence_output_dir = os.path.join(destination_dir, group_name)
+            # Get group dir path (e.g. `Banjo-Kazooie Series/Banjo-Kazooie`)
+            relative_group_path = os.path.relpath(file_path, source_dir)
+
+            # Append group path to destinarion dir
+            sequence_output_dir = os.path.join(destination_dir, relative_group_path)
             shutil.unpack_archive(file_path, sequence_output_dir, 'zip')
